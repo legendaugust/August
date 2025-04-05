@@ -1,0 +1,38 @@
+-- Lấy người chơi
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Kích thước ban đầu của người chơi
+local originalSize = humanoid.HipWidth
+
+-- Hàm thay đổi kích thước của người chơi
+local function changeSize(scale)
+    humanoid.HipWidth = originalSize * scale
+    humanoid.HipHeight = originalSize * scale
+end
+
+-- Kiểm tra sự kiện nhấn phím
+local UserInputService = game:GetService("UserInputService")
+
+UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+    if gameProcessedEvent then return end  -- Kiểm tra xem phím có được sử dụng trong game hay không
+
+    if input.KeyCode == Enum.KeyCode.L then
+        -- Khi nhấn phím L, tăng kích thước người chơi
+        changeSize(2)  -- Tăng gấp đôi kích thước
+    elseif input.KeyCode == Enum.KeyCode.K then
+        -- Khi nhấn phím K, giảm kích thước người chơi
+        changeSize(0.5)  -- Giảm kích thước xuống một nửa
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.L then
+        -- Khi nhả phím L, trở lại kích thước ban đầu
+        changeSize(1)  -- Quay lại kích thước ban đầu
+    elseif input.KeyCode == Enum.KeyCode.K then
+        -- Khi nhả phím K, trở lại kích thước ban đầu
+        changeSize(1)  -- Quay lại kích thước ban đầu
+    end
+end)
